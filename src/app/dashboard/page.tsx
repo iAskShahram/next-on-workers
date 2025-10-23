@@ -246,7 +246,7 @@ export default async function Dashboard() {
               {Object.entries(topLanguages).map(([language, count]) => (
                 <div
                   key={language}
-                  className="flex items-center justify-between p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.05] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+                  className="group flex items-center justify-between p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.05] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-center space-x-4">
                     <div
@@ -254,11 +254,11 @@ export default async function Dashboard() {
                         language
                       )}`}
                     ></div>
-                    <span className="text-white font-semibold text-lg">
+                    <span className="text-white group-hover:text-black font-semibold text-lg">
                       {language}
                     </span>
                   </div>
-                  <span className="text-white font-bold text-lg">
+                  <span className="text-white group-hover:text-black font-bold text-lg">
                     {count} repo{count !== 1 ? "s" : ""}
                   </span>
                 </div>
@@ -309,14 +309,14 @@ export default async function Dashboard() {
             {repos.slice(0, 5).map((repo, index) => (
               <div
                 key={repo.id}
-                className={`border border-white p-6 hover:bg-white hover:text-black hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer ${
+                className={`group border border-white p-6 hover:bg-white hover:text-black hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer ${
                   index % 2 === 0 ? 'bg-[#1f1f1f]' : 'bg-[#212121]'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-3">
-                      <h4 className="text-xl font-bold text-white">
+                      <h4 className="text-xl font-bold text-white group-hover:text-black">
                         {repo.name}
                       </h4>
                       {repo.language && (
@@ -330,11 +330,11 @@ export default async function Dashboard() {
                       )}
                     </div>
                     {repo.description && (
-                      <p className="text-white mb-4 leading-relaxed text-lg">
+                      <p className="text-white group-hover:text-black mb-4 leading-relaxed text-lg">
                         {repo.description}
                       </p>
                     )}
-                    <div className="flex items-center space-x-6 text-lg text-white">
+                    <div className="flex items-center space-x-6 text-lg text-white group-hover:text-black">
                       <span className="font-bold">⭐ {repo.stargazers_count}</span>
                       <span className="font-bold">🍴 {repo.forks_count}</span>
                       <span className="font-semibold">Updated {formatDate(repo.updated_at)}</span>
@@ -344,7 +344,7 @@ export default async function Dashboard() {
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="ml-6 px-6 py-3 bg-white text-black hover:bg-black hover:text-white hover:scale-110 transition-all duration-200 font-bold text-lg border border-white hover:border-2"
+                    className="ml-6 px-6 py-3 bg-white text-black group-hover:bg-black group-hover:text-white hover:scale-110 transition-all duration-200 font-bold text-lg border border-white hover:border-2"
                   >
                     View
                   </a>
