@@ -1,21 +1,40 @@
-import Link from "next/link";
+"use client";
+
+import { motion } from "motion/react";
+import { UsernameForm } from "./components/username-form";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="text-center max-w-4xl mx-auto px-6">
-        <h1 className="text-5xl font-bold text-white mb-6">
-          Next.js on Cloudflare Workers
-        </h1>
-        <p className="text-2xl text-white mb-10 leading-relaxed">
-          Successfully deployed with SSR support!
-        </p>
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center px-8 py-4 border-2 border-white text-xl font-bold text-white bg-[#1f1f1f] hover:bg-white hover:text-black hover:scale-110 transition-all duration-300"
+        <motion.h1 
+          className="text-5xl font-bold text-white mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.8
+          }}
         >
-          View GitHub Dashboard
-        </Link>
+          GitHub Dashboard
+        </motion.h1>
+        <motion.p 
+          className="text-2xl text-white mb-10 leading-relaxed"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
+            mass: 0.8,
+            delay: 0.1
+          }}
+        >
+          Explore any GitHub user&apos;s profile and repositories
+        </motion.p>
+        <UsernameForm />
       </div>
     </div>
   );

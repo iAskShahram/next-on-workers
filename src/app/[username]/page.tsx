@@ -1,9 +1,13 @@
+import { Suspense } from "react";
 import { PageComponent } from "./page-component";
 import { DashboardData, GitHubRepo, GitHubUser } from "./types";
+import { DashboardSkeleton } from "./skeleton";
 
-async function fetchGitHubData(): Promise<DashboardData> {
-  const username = "iAskShahram";
-
+async function fetchGitHubData({
+  username,
+}: {
+  username: string;
+}): Promise<DashboardData> {
   try {
     // Fetch user profile and repositories in parallel
     const [userResponse, reposResponse] = await Promise.all([
@@ -70,46 +74,19 @@ async function fetchGitHubData(): Promise<DashboardData> {
   }
 }
 
-export default async function Dashboard() {
-  let data: DashboardData;
-
-  try {
-    data = await fetchGitHubData();
-  } catch (error: unknown) {
-    console.error("Error fetching GitHub data:", error);
-    if (error instanceof Error) {
-      console.error("Error message:", error.message);
-      console.error("Error stack:", error.stack);
-    }
-    if (error instanceof Error && error.message.includes("GitHub API error")) {
-      console.error("GitHub API error details:", error.message);
-    }
-    if (
-      error instanceof Error &&
-      error.message.includes("Failed to fetch GitHub data")
-    ) {
-      console.error("Failed to fetch GitHub data:", error.message);
-    }
-    if (error instanceof Error && error.message.includes("GitHub API error")) {
-      console.error("GitHub API error details:", error.message);
-    }
-    return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Error Loading Dashboard
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Failed to fetch GitHub data. Please try again later.
-          </p>
-        </div>
-      </div>
-    );
-  }
+export default async function Dashboard({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) {
+  const { username } = await params;
+  
+  // Create the promise but don't await it
+  const dataPromise = fetchGitHubData({ username });
 
   return (
-    <PageComponent
-      data={data}
-    />
+    <Suspense fallback={<DashboardSkeleton />}>
+      <PageComponent dataPromise={dataPromise} />
+    </Suspense>
   );
 }

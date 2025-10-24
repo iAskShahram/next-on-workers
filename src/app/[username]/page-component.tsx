@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { use } from "react";
 import { motion } from "motion/react";
 import { DashboardData } from "./types";
 
@@ -18,40 +18,39 @@ function formatDate(dateString: string): string {
   });
 }
 
-
 const slideInLeft = {
   initial: { opacity: 0, x: -30 },
   animate: { opacity: 1, x: 0 },
-  transition: { 
+  transition: {
     type: "spring",
     stiffness: 80,
     damping: 25,
-    mass: 0.8
-  }
+    mass: 0.8,
+  },
 };
 
 const slideInRight = {
   initial: { opacity: 0, x: 30 },
   animate: { opacity: 1, x: 0 },
-  transition: { 
+  transition: {
     type: "spring",
     stiffness: 80,
     damping: 25,
-    mass: 0.8
-  }
+    mass: 0.8,
+  },
 };
 
 const staggerContainer = {
   animate: {
     transition: {
       staggerChildren: 0.08,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 };
 
-
-export const PageComponent = ({ data }: { data: DashboardData }) => {
+export const PageComponent = ({ dataPromise }: { dataPromise: Promise<DashboardData> }) => {
+  const data = use(dataPromise);
   const { user, repos, totalStars, topLanguages } = data;
 
   return (
@@ -59,7 +58,7 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
         {/* Header */}
         <div className="mb-10">
-          <motion.h1 
+          <motion.h1
             className="text-4xl font-bold text-white mb-2"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -67,7 +66,7 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
           >
             GitHub Dashboard
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-white text-lg"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -78,29 +77,29 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
         </div>
 
         {/* Profile Card */}
-        <motion.div 
+        <motion.div
           className="bg-[#1f1f1f] border border-white p-8 mb-10 hover:bg-[#212121] hover:border-2 transition-all duration-300"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ 
+          transition={{
             type: "spring",
             stiffness: 100,
             damping: 20,
             mass: 0.8,
-            delay: 0.2
+            delay: 0.2,
           }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.01,
-            transition: { type: "spring", stiffness: 400, damping: 25 }
+            transition: { type: "spring", stiffness: 400, damping: 25 },
           }}
         >
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-            <motion.div 
+            <motion.div
               className="relative cursor-pointer"
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
                 rotateY: 5,
-                transition: { type: "spring", stiffness: 300, damping: 20 }
+                transition: { type: "spring", stiffness: 300, damping: 20 },
               }}
             >
               <Image
@@ -110,11 +109,11 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
                 height={150}
                 className="border-4 border-white"
               />
-              <motion.div 
+              <motion.div
                 className="absolute -left-2 top-0 w-2 h-full bg-white"
-                whileHover={{ 
+                whileHover={{
                   scaleY: 1.1,
-                  transition: { type: "spring", stiffness: 400, damping: 25 }
+                  transition: { type: "spring", stiffness: 400, damping: 25 },
                 }}
               ></motion.div>
             </motion.div>
@@ -129,14 +128,14 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
               {user.location && (
                 <p className="text-white mb-6 text-lg">📍 {user.location}</p>
               )}
-              <motion.div 
+              <motion.div
                 className="grid grid-cols-2 md:grid-cols-4 gap-6"
                 variants={{
                   animate: {
                     transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
+                      staggerChildren: 0.1,
+                    },
+                  },
                 }}
                 initial="initial"
                 animate="animate"
@@ -145,27 +144,35 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
                   { value: user.public_repos, label: "Repositories" },
                   { value: user.followers, label: "Followers" },
                   { value: user.following, label: "Following" },
-                  { value: totalStars, label: "Total Stars" }
+                  { value: totalStars, label: "Total Stars" },
                 ].map((stat) => (
-                  <motion.div 
+                  <motion.div
                     key={stat.label}
                     className="text-center p-4 border border-white hover:bg-white hover:text-black cursor-pointer"
                     variants={{
                       initial: { opacity: 0, y: 20 },
-                      animate: { opacity: 1, y: 0 }
+                      animate: { opacity: 1, y: 0 },
                     }}
-                    whileHover={{ 
+                    whileHover={{
                       y: -8,
                       scale: 1.05,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
+                      transition: {
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 25,
+                      },
                     }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className="text-3xl font-bold mb-1"
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.1,
-                        transition: { type: "spring", stiffness: 500, damping: 20 }
+                        transition: {
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 20,
+                        },
                       }}
                     >
                       {stat.value}
@@ -179,32 +186,32 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
         </motion.div>
 
         {/* Stats Grid */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
         >
           {/* Top Languages */}
-          <motion.div 
+          <motion.div
             className="bg-[#1f1f1f] border border-white p-8 hover:bg-[#212121] hover:border-2 transition-all duration-300"
             variants={slideInLeft}
-            whileHover={{ 
+            whileHover={{
               scale: 1.01,
-              transition: { type: "spring", stiffness: 400, damping: 25 }
+              transition: { type: "spring", stiffness: 400, damping: 25 },
             }}
           >
             <h3 className="text-2xl font-bold text-white mb-6 border-b border-white pb-2">
               Top Languages
             </h3>
-            <motion.div 
+            <motion.div
               className="space-y-4"
               variants={{
                 animate: {
                   transition: {
-                    staggerChildren: 0.08
-                  }
-                }
+                    staggerChildren: 0.08,
+                  },
+                },
               }}
               initial="initial"
               animate="animate"
@@ -215,16 +222,20 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
                   className="group flex items-center justify-between p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.05] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
                   variants={{
                     initial: { opacity: 0, y: 10 },
-                    animate: { opacity: 1, y: 0 }
+                    animate: { opacity: 1, y: 0 },
                   }}
                 >
                   <div className="flex items-center space-x-4">
                     <motion.div
                       className={`w-4 h-4 border border-white ${getLanguageColor()}`}
-                      whileHover={{ 
+                      whileHover={{
                         rotate: 45,
                         scale: 1.2,
-                        transition: { type: "spring", stiffness: 400, damping: 25 }
+                        transition: {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 25,
+                        },
                       }}
                     ></motion.div>
                     <span className="text-white group-hover:text-black font-semibold text-lg">
@@ -240,54 +251,54 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
           </motion.div>
 
           {/* Account Info */}
-          <motion.div 
+          <motion.div
             className="bg-[#1f1f1f] border border-white p-8 hover:bg-[#212121] hover:border-2 transition-all duration-300"
             variants={slideInRight}
-            whileHover={{ 
+            whileHover={{
               scale: 1.01,
-              transition: { type: "spring", stiffness: 400, damping: 25 }
+              transition: { type: "spring", stiffness: 400, damping: 25 },
             }}
           >
             <h3 className="text-2xl font-bold text-white mb-6 border-b border-white pb-2">
               Account Information
             </h3>
-            <motion.div 
+            <motion.div
               className="space-y-4"
               variants={{
                 animate: {
                   transition: {
-                    staggerChildren: 0.08
-                  }
-                }
+                    staggerChildren: 0.08,
+                  },
+                },
               }}
               initial="initial"
               animate="animate"
             >
-              <motion.div 
+              <motion.div
                 className="flex justify-between items-center p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.03] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
                 variants={{
                   initial: { opacity: 0, y: 10 },
-                  animate: { opacity: 1, y: 0 }
+                  animate: { opacity: 1, y: 0 },
                 }}
               >
                 <span className="font-semibold">Member since</span>
                 <span className="font-bold">{formatDate(user.created_at)}</span>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex justify-between items-center p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.03] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
                 variants={{
                   initial: { opacity: 0, y: 10 },
-                  animate: { opacity: 1, y: 0 }
+                  animate: { opacity: 1, y: 0 },
                 }}
               >
                 <span className="font-semibold">Last updated</span>
                 <span className="font-bold">{formatDate(user.updated_at)}</span>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex justify-between items-center p-3 border border-white hover:bg-white hover:text-black hover:scale-[1.03] hover:-translate-y-1 transition-all duration-200 cursor-pointer"
                 variants={{
                   initial: { opacity: 0, y: 10 },
-                  animate: { opacity: 1, y: 0 }
+                  animate: { opacity: 1, y: 0 },
                 }}
               >
                 <span className="font-semibold">User ID</span>
@@ -298,23 +309,23 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
         </motion.div>
 
         {/* Top Repositories */}
-        <motion.div 
+        <motion.div
           className="bg-[#1f1f1f] border border-white p-8 hover:border-2 transition-all duration-300"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ 
+          transition={{
             type: "spring",
             stiffness: 100,
             damping: 20,
             mass: 0.8,
-            delay: 0.6
+            delay: 0.6,
           }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.005,
-            transition: { type: "spring", stiffness: 300, damping: 30 }
+            transition: { type: "spring", stiffness: 300, damping: 30 },
           }}
         >
-          <motion.h3 
+          <motion.h3
             className="text-2xl font-bold text-white mb-8 border-b border-white pb-2"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -322,14 +333,14 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
           >
             Top Repositories
           </motion.h3>
-          <motion.div 
+          <motion.div
             className="space-y-0"
             variants={{
               animate: {
                 transition: {
-                  staggerChildren: 0.12
-                }
-              }
+                  staggerChildren: 0.12,
+                },
+              },
             }}
             initial="initial"
             animate="animate"
@@ -342,24 +353,24 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
                 }`}
                 variants={{
                   initial: { opacity: 0, y: 40, rotateX: 10 },
-                  animate: { opacity: 1, y: 0, rotateX: 0 }
+                  animate: { opacity: 1, y: 0, rotateX: 0 },
                 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.02,
                   y: -8,
                   rotateX: -2,
-                  transition: { type: "spring", stiffness: 400, damping: 25 }
+                  transition: { type: "spring", stiffness: 400, damping: 25 },
                 }}
-                whileInView={{ 
-                  opacity: 1, 
-                  y: 0, 
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
                   rotateX: 0,
-                  transition: { 
-                    type: "spring", 
-                    stiffness: 100, 
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
                     damping: 20,
-                    delay: index * 0.1
-                  }
+                    delay: index * 0.1,
+                  },
                 }}
                 viewport={{ once: true, margin: "-50px" }}
               >
@@ -397,24 +408,28 @@ export const PageComponent = ({ data }: { data: DashboardData }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="ml-6 px-6 py-3 bg-white text-black group-hover:bg-black group-hover:text-white font-bold text-lg border border-white hover:border-2"
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.1,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
+                      transition: {
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 25,
+                      },
                     }}
                     whileTap={{ scale: 0.95 }}
-                    animate={{ 
+                    animate={{
                       boxShadow: [
                         "0 0 0 0 rgba(255, 255, 255, 0)",
                         "0 0 0 8px rgba(255, 255, 255, 0.1)",
-                        "0 0 0 0 rgba(255, 255, 255, 0)"
-                      ]
+                        "0 0 0 0 rgba(255, 255, 255, 0)",
+                      ],
                     }}
-                    transition={{ 
-                      boxShadow: { 
-                        duration: 2, 
-                        repeat: Infinity, 
-                        ease: "easeInOut" 
-                      }
+                    transition={{
+                      boxShadow: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
                     }}
                   >
                     View
